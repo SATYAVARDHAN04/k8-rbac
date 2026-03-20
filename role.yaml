@@ -7,7 +7,7 @@ rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: ["apps"] # "" indicates the core API group
   resources: ["deployment"]
   verbs: ["get", "watch", "list"]
 ---
@@ -17,7 +17,7 @@ metadata:
   namespace: roboshop
   name: robosjop-trainee
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: ["apps"] # "" indicates the core API group
   resources: ["pods","deployment"]
   verbs: ["get", "watch", "list","create"]
 ---
