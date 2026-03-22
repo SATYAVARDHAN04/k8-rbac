@@ -4,9 +4,10 @@ metadata:
   namespace: roboshop
   name: sa-reader
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -14,23 +15,23 @@ metadata:
   name: sa-reader
   namespace: roboshop
 subjects:
-# You can specify more than one "subject"
-- kind: Service
-  name: roboshop-mysql-secret # create this user in AWS IAM (EKS - READ - "DescribeCluster" - specify cluster name also)
-  apiGroup: rbac.authorization.k8s.io
+- kind: ServiceAccount
+  name: roboshop-mysql-secret
+  namespace: roboshop
 roleRef:
-  # "roleRef" specifies the binding to a Role / ClusterRole
-  kind: Role #this must be Role or ClusterRole
-  name: sa-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  kind: Role
+  name: sa-reader
   apiGroup: rbac.authorization.k8s.io
+
 ---
 apiVersion: v1
 kind: Pod
 metadata:
   name: sa-reader
+  namespace: roboshop
 spec:
-  serviceAccount: roboshop-mysql-secret
+  serviceAccountName: roboshop-mysql-secret
   containers:
-    - name: amazon
-      image: amazon/aws-cli
-      command: ["sleep","1000"]
+  - name: amazon
+    image: amazon/aws-cli
+    command: ["sleep","1000"]
