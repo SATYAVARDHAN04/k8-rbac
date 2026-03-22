@@ -33,7 +33,7 @@ metadata:
   name: roboshop-junior
 rules:
 - apiGroups: ["apps"] # "" indicates the core API group
-  resources: ["deployment"]
+  resources: ["deployments"]
   verbs: ["get", "watch", "list","create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -60,7 +60,7 @@ metadata:
   namespace: roboshop
   name: roboshop-senior
 rules:
-- apiGroups: ["apps"] # "" indicates the core API group
+- apiGroups: [""] # "" indicates the core API group
   resources: ["*"]
   verbs: ["get", "watch", "list","create"]
 ---
