@@ -29,6 +29,7 @@ kind: Pod
 metadata:
   name: sa-reader
 spec:
+  serviceAccount: roboshop-mysql-secret
   containers:
     - name: amazon
       image: amazon/aws-cli
