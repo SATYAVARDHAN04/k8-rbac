@@ -23,3 +23,13 @@ roleRef:
   kind: Role #this must be Role or ClusterRole
   name: sa-reader # this must match the name of the Role or ClusterRole you wish to bind to
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sa-reader
+spec:
+  containers:
+    - name: amazon
+      image: amazon/aws-cli
+      command: ["sleep","1000"]
