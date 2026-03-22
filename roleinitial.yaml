@@ -88,7 +88,7 @@ metadata:
   # "namespace" omitted since ClusterRoles are not namespaced
   name: roboshop-cluster
 rules:
-- apiGroups: [""]
+- apiGroups: ["v1"]
   resources: ["persistentvolumes"]
   verbs: ["get", "watch", "list"]
 ---
