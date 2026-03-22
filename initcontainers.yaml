@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldeployment
+  namespace: roboshop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: mysql
+      tier: database
+  template:
+    metadata:
+      labels:
+        component: mysql
+        tier: database
+    spec:
+      serviceAccountName: roboshop-mysql-secret
+      volumes:
+        - name: mysqlsecret
+          emptyDir: {}
+
+      initContainers:
+        - name: init-myservice
+          image: amazon/aws-cli
+          command:
+            - sh
+            - -c
+            - |
+              yum install -y jq && \
+              aws secretsmanager get-secret-value \
+              --secret-id roboshop/mysql/password \
+              --query SecretString \
+              --output text | jq -r .MYSQL_ROOT_PASSWORD > /tmp/mysql_root_password.txt
+          volumeMounts:
+            - mountPath: /tmp
+              name: mysqlsecret
+
+      containers:
+        - name: mysql
+          image: nginx
+          volumeMounts:
+            - mountPath: /tmp
+              name: mysqlsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqlservice
+  namespace: roboshop
+  labels:
+    component: mysql
+    tier: database
+spec:
+  type: ClusterIP
+  selector:
+    component: mysql
+    tier: database
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
